@@ -1,0 +1,62 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class NumberGuessingGame {
+    private static final int MIN_RANGE = 1;
+    private static final int MAX_RANGE = 100;
+    private static final int MAX_ATTEMPTS = 10;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String playAgain;
+        int roundsPlayed = 0;
+        int roundsWon = 0;
+
+        do {
+            roundsPlayed++;
+            boolean won = playGame(scanner);
+            if (won) {
+                roundsWon++;
+            }
+            System.out.print("Do you want to play again? (yes/no): ");
+            playAgain = scanner.next();
+        } while (playAgain.equalsIgnoreCase("yes"));
+
+        System.out.println("You played " + roundsPlayed + " rounds.");
+        System.out.println("You won " + roundsWon + " rounds.");
+        scanner.close();
+    }
+
+    private static boolean playGame(Scanner scanner) {
+        Random random = new Random();
+        int numberToGuess = random.nextInt(MAX_RANGE - MIN_RANGE + 1) + MIN_RANGE;
+        int attempts = 0;
+        boolean guessedCorrectly = false;
+
+        System.out.println("Guess the number between " + MIN_RANGE + " and " + MAX_RANGE + ". You have " + MAX_ATTEMPTS + " attempts.");
+
+        while (attempts < MAX_ATTEMPTS) {
+            System.out.print("Enter your guess: ");
+            int guess = scanner.nextInt();
+            attempts++;
+
+            if (guess == numberToGuess) {
+                guessedCorrectly = true;
+                System.out.println("Congratulations! You guessed the correct number in " + attempts + " attempts.");
+                break;
+            } else if (guess < numberToGuess) {
+                System.out.println("Your guess is too low.");
+            } else {
+                System.out.println("Your guess is too high.");
+            }
+
+            System.out.println("You have " + (MAX_ATTEMPTS - attempts) + " attempts left.");
+        }
+
+        if (!guessedCorrectly) {
+            System.out.println("Sorry, you've used all your attempts. The correct number was " + numberToGuess + ".");
+        }
+
+        return guessedCorrectly;
+    }
+}
